@@ -14,4 +14,5 @@ print(order.getOrderId())
 
 p = Product(2,"otto",123,2,1)
 p.setName("Ole")
-print(p.getName())
+p.setProductID(3)
+print(p.getProductID())
