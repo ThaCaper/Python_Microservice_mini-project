@@ -110,3 +110,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .idea/Python_Microservice_mini-project.iml
+venv/OrderAPI/DATA/orderdb.db

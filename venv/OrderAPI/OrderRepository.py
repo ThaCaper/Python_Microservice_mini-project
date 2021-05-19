@@ -1,6 +1,5 @@
 import sqlite3
 
-
 class OrderRepository:
     # denne skal snakke med sqllite for order
 
@@ -14,7 +13,6 @@ class OrderRepository:
             ProductID = row[2]
             Quantity = row[3]
             OrderList.append({'orderid': OrderId, 'Date': Date, 'productid': ProductID, 'Quantity': Quantity})
-
         conn.close()
         return OrderList
 
@@ -34,6 +32,5 @@ class OrderRepository:
 orr = OrderRepository()
 
 print(orr.GetALLOrders())
-
 
 # orr.getOrdesById(1)
