@@ -25,12 +25,16 @@ class OrderRepository:
             print("ProductID = ", row[2])
             print("Quantity = ", row[3])
             print("\n")
+        return {'orderid': OrderId, 'Date': Date, 'productid': ProductID, 'Quantity': Quantity}
         print("Operation done successfully");
         conn.close()
 
 
 orr = OrderRepository()
 
-print(orr.GetALLOrders())
+res = orr.GetALLOrders()
+for order in res:
+    print(order)
+   # print(order.get("Date"))
 
 # orr.getOrdesById(1)

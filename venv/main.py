@@ -5,10 +5,9 @@
 from Modules.Order import Order
 from Modules.Product import Product
 from OrderAPI.OrderRepository import OrderRepository
-import sqlite3
 
 
 order_repo = OrderRepository()
 for orde in order_repo:
-    print(str(orde))
+    print(orde)
 
