@@ -16,3 +16,9 @@ p = Product(2,"otto",123,2,1)
 p.setName("Ole")
 p.setProductID(3)
 print(p.getProductID())
+
+
+def Menu():
+    connection = databaseinit.connect
+    databaseinit.CREATE_PRODUCT_TABLE(connection)
+
