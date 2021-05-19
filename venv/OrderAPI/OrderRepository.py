@@ -29,6 +29,11 @@ class OrderRepository:
         print("Operation done successfully");
         conn.close()
 
+    def deleteOrdesById(self, id):
+        conn = sqlite3.connect('ORDERSDB.db')
+        conn.execute("DELETE from ORDERS where OrderId ="+str(id)+";")
+        conn.commit()
+
 
 orr = OrderRepository()
 
@@ -36,5 +41,13 @@ res = orr.GetALLOrders()
 for order in res:
     print(order)
    # print(order.get("Date"))
+print("-----------------------------------------")
 
 # orr.getOrdesById(1)
+
+print("deleting a order by some id")
+orr.deleteOrdesById(1)
+print("----------------------------------------")
+res = orr.GetALLOrders()
+for order in res:
+    print(order)
