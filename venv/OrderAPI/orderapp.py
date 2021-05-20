@@ -58,9 +58,9 @@ def single_order(id):
         sql_update_order = """UPDATE Orders 
                                 SET date=?,
                                     productId=?,
-                                    quantity=?,
+                                    quantity=?
                                 WHERE id=?"""
-        date = request.form['date']
+        date = datetime.datetime.now()
         product_id = int(request.form['productId'])
         quantity = int(request.form['quantity'])
 
