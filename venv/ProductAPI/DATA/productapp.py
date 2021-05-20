@@ -1,19 +1,16 @@
 from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
+import sqlite3
+import json
 
 productapp = Flask(__name__)
-productapp.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///productsdb.db'
-db = SQLAlchemy(productapp)
 
-class Product(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20), nullable=False)
-    price = db.Column(db.Integer, nullable=False)
-    itemsInStock = db.Column(db.Integer, nullable=False)
-    itemsReserved = db.Column(db.Integer, nullable=False)
-
-    def __repr__(self):
-        return '<Task %r>' % self.id
+def db_connection():
+    conn = None
+    try:
+        conn = sqlite3.connect('product.db')
+    except sqlite3.error as e:
+        print(e)
+    return conn
 
 product_list = [
     {
@@ -38,59 +35,72 @@ product_list = [
         "itemsReserved": 0
     }]
 
-
-
 @productapp.route('/products', methods=['POST', 'GET'])
 def product():
+    conn = db_connection()
+    cursor = conn.cursor()
     if request.method == 'GET':
-        if len(product_list) > 0:
-            return jsonify(product_list)
-        else:
-            'Nothing found', 404
+        cursor = conn.execute("SELECT * FROM Product")
+        products = [
+            dict(id=row[0], name=row[1], price=row[2], itemInStock=row[3], itemsReserved=row[4])
+            for row in cursor.fetchall()
+        ]
+        if products is not None:
+            return jsonify(products)
+
     if request.method == 'POST':
         new_name = request.form['name']
         new_price = request.form['price']
         new_itemsInStock = request.form['itemsInStock']
         new_itemsReserved = request.form['itemsReserved']
-        iD = product_list[-1]['id']+1
-
-        new_product = {
-            'id': iD,
-            'name': new_name,
-            'price': new_price,
-            'itemsInStock': new_itemsInStock,
-            'itemsReserved': new_itemsReserved
-        }
-        product_list.append(new_product)
-        return jsonify(product_list), 201
+        sql_insert_query = """INSERT INTO Product (name, price, itemsInStock, itemsReserved)
+                              VALUES (?, ?, ?, ?)"""
+        cur = cursor.execute(sql_insert_query, (new_name, new_price, new_itemsInStock, new_itemsReserved))
+        conn.commit()
+        return f"Product with the id: {cur.lastrowid} created successfully", 201
 
 @productapp.route('/product/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def single_product(id):
+    conn = db_connection()
+    cursor = conn.cursor()
+    product = None
     if request.method == 'GET':
-        for product in product_list:
-            if product['id'] == id:
-                return jsonify(product)
-            pass
+        cursor.execute("SELECT * FROM Product WHERE id=?", (id,))
+        rows = cursor.fetchall()
+        for r in rows:
+            product = r
+        if product is not None:
+            return jsonify(product), 200
+        else:
+            return "Something went wrong", 404
+
     if request.method == 'PUT':
-        for product in product_list:
-            if product['id'] == id:
-                product['name'] = request.form['name']
-                product['price'] = request.form['price']
-                product['itemsInStock'] = request.form['itemsInStock']
-                product['itemsReserved'] = request.form['itemsReserved']
-                updated_product = {
-                    'id': id,
-                    'name': product['name'],
-                    'price': product['price'],
-                    'itemsInStock': product['itemsInStock'],
-                    'itemsReserved': product['itemsReserved']
-                }
-                return jsonify(updated_product)
+        sql_update_product = """UPDATE Product 
+                                SET name=?,
+                                    price=?,
+                                    itemsInStock=?,
+                                    itemsReserved=?
+                                WHERE id=?"""
+        name = request.form['name']
+        price = request.form['price']
+        itemsInStock = request.form['itemsInStock']
+        itemsReserved = request.form['itemsReserved']
+        updated_product = {
+            'id': id,
+            'name': name,
+            'price': price,
+            'itemsInStock': itemsInStock,
+            'itemsReserved': itemsReserved
+            }
+        conn.execute(sql_update_product, (name, price, itemsInStock, itemsReserved, id))
+        conn.commit()
+        return jsonify(updated_product)
+
     if request.method == 'DELETE':
-        for index, product in enumerate(product_list):
-            if product['id'] == id:
-                product_list.pop(index)
-                return jsonify(product_list)
+        sql_delete_product = """DELETE FROM Product WHERE id=?"""
+        conn.execute(sql_delete_product, (id,))
+        conn.commit()
+        return "The Product with the id: {} has been deleted.".format(id), 200
 
 if __name__ == "__main__":
     productapp.run(debug=True)
