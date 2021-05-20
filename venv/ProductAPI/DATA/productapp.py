@@ -12,29 +12,6 @@ def db_connection():
         print(e)
     return conn
 
-product_list = [
-    {
-        "id": 1,
-        "name": "Hammer",
-        "price": 100,
-        "itemsInStock": 10,
-        "itemsReserved": 0
-    },
-    {
-        "id": 2,
-        "name": "Screwdriver",
-        "price": 70,
-        "itemsInStock": 20,
-        "itemsReserved": 0
-    },
-    {
-        "id": 3,
-        "name": "Drill",
-        "price": 500,
-        "itemsInStock": 2,
-        "itemsReserved": 0
-    }]
-
 @productapp.route('/products', methods=['POST', 'GET'])
 def product():
     conn = db_connection()
