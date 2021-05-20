@@ -56,17 +56,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SharedProduct"
+                "$ref": "#/components/schemas/Product"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SharedProduct"
+                "$ref": "#/components/schemas/Product"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SharedProduct"
+                "$ref": "#/components/schemas/Product"
               }
             }
           }
@@ -120,17 +120,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SharedProduct"
+                "$ref": "#/components/schemas/Product"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SharedProduct"
+                "$ref": "#/components/schemas/Product"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SharedProduct"
+                "$ref": "#/components/schemas/Product"
               }
             }
           }
