@@ -1,22 +1,16 @@
 import sqlite3
+import datetime
 
-
-conn = sqlite3.connect('ORDERSDB.db')
+conn = sqlite3.connect('order.db')
 print("Opened database successfully");
 
-conn.execute('''CREATE TABLE ORDERS
-         (OrderId INT PRIMARY KEY     NOT NULL,
-         Date           DATE    NOT NULL,
-         ProductID            INT     NOT NULL,
-         Quantity        int
+conn.execute('''CREATE TABLE Orders
+         (id INTEGER PRIMARY KEY NOT NULL,
+         date timestamp,
+         productId INTEGER NOT NULL,
+         quantity INTEGER NOT NULL
          );''')
-print("Table created successfully");
+print("Table created successfully")
 
-conn.execute("INSERT INTO ORDERS (OrderId,Date,ProductID,Quantity) \
-      VALUES (1, 2008-11-11, 1, 2 )");
-
-conn.execute("INSERT INTO ORDERS (OrderId,Date,ProductID,Quantity) \
-      VALUES (2, 2008-9-8, 2, 5 )");
 
 conn.commit()
-conn.close()
