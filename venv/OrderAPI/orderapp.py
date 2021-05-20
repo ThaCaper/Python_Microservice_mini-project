@@ -1,9 +1,23 @@
 from flask import Flask, request, jsonify
+from flask_swagger_ui import get_swaggerui_blueprint
 import sqlite3
 import json
 import datetime
 
 orderapp = Flask(__name__)
+
+### swagger specific ###
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swaggerOrder.json'
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "OrderAPI Microservice Mini Project"
+    }
+)
+orderapp.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+### end swagger specific ###
 
 
 def db_connection():
