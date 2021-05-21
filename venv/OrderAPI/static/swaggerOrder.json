@@ -78,7 +78,7 @@
         }
       }
     },
-    "/Orders/{id}": {
+    "/order/{id}": {
       "get": {
         "tags": [
           "Orders"

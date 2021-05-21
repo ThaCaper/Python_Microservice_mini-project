@@ -94,4 +94,4 @@ def single_product(id):
         return "The Product with the id: {} has been deleted.".format(id), 200
 
 if __name__ == "__main__":
-    productapp.run(debug=True)
+    productapp.run(port=8000, host="http://localhost")
