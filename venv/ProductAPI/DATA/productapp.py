@@ -40,17 +40,17 @@ def product():
             return jsonify(products)
 
     if request.method == 'POST':
-        new_name = request.form['name']
-        new_price = request.form['price']
-        new_itemsInStock = request.form['itemsInStock']
-        new_itemsReserved = request.form['itemsReserved']
+        new_name = request.json["name"]
+        new_price = request.json["price"]
+        new_itemsInStock = request.json["itemsInStock"]
+        new_itemsReserved = request.json["itemsReserved"]
         sql_insert_query = """INSERT INTO Product (name, price, itemsInStock, itemsReserved)
                               VALUES (?, ?, ?, ?)"""
         cur = cursor.execute(sql_insert_query, (new_name, new_price, new_itemsInStock, new_itemsReserved))
         conn.commit()
         return f"Product with the id: {cur.lastrowid} created successfully", 201
 
-@productapp.route('/product/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+@productapp.route('/products/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def single_product(id):
     conn = db_connection()
     cursor = conn.cursor()
@@ -72,10 +72,10 @@ def single_product(id):
                                     itemsInStock=?,
                                     itemsReserved=?
                                 WHERE id=?"""
-        name = request.form['name']
-        price = request.form['price']
-        itemsInStock = request.form['itemsInStock']
-        itemsReserved = request.form['itemsReserved']
+        name = request.json["name"]
+        price = request.json["price"]
+        itemsInStock = request.json["itemsInStock"]
+        itemsReserved = request.json["itemsReserved"]
         updated_product = {
             'id': id,
             'name': name,
