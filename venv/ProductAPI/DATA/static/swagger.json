@@ -78,7 +78,7 @@
         }
       }
     },
-    "/Products/{id}": {
+    "/products/{id}": {
       "get": {
         "tags": [
           "Products"
