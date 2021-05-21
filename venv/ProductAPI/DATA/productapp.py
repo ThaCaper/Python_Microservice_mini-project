@@ -93,5 +93,19 @@ def single_product(id):
         conn.commit()
         return "The Product with the id: {} has been deleted.".format(id), 200
 
+
+@productapp.route('/products/check/<int:prodid>/<int:amount>', methods=['GET'])
+def check_product(prodid, amount):
+    conn = db_connection()
+    cursor = conn.cursor()
+    cursor = conn.execute("SELECT * FROM Product where id ="+ str(prodid))
+    rows = cursor.fetchone()
+    instock = rows[3]
+    if instock > amount:
+        return "dit product kan købes"
+    else:
+        return "vi har ikke nok af dette product"
+
+
 if __name__ == "__main__":
     productapp.run(port=8000, host="http://localhost")
