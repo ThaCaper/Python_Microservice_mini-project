@@ -7,6 +7,6 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY ./DATA ./productApi
+COPY ./DATA ./productapi
 
-CMD [ "python", ".DATA/productapp.py"]
+CMD ["python", "./DATA/productapp.py"]
