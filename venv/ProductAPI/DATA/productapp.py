@@ -108,4 +108,4 @@ def check_product(prodid, amount):
 
 
 if __name__ == "__main__":
-    productapp.run(port=8000, host="0.0.0.0")
+    productapp.run(port=5000, host="0.0.0.0")
