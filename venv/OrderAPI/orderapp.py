@@ -4,6 +4,7 @@ import sqlite3
 import json
 import datetime
 
+
 orderapp = Flask(__name__)
 
 ### swagger specific ###
@@ -48,6 +49,7 @@ def order():
         new_quantity = request.json["quantity"]
         sql_insert_query = """INSERT INTO Orders (date, productId, quantity)
                               VALUES (?, ?, ?)"""
+
         cur = cursor.execute(sql_insert_query, (new_date, new_product_id, new_quantity))
         conn.commit()
         return f"orders with the id: {cur.lastrowid} created successfully", 201

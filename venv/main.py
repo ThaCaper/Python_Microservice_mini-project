@@ -7,7 +7,3 @@ from Modules.Product import Product
 from OrderAPI.OrderRepository import OrderRepository
 
 
-order_repo = OrderRepository()
-for orde in order_repo:
-    print(orde)
-
