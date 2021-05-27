@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
 import sqlite3
 import json
+import pika
 
 productapp = Flask(__name__)
 
@@ -15,8 +16,13 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
         'app_name': "ProductAPI Microservice Mini Project"
     }
 )
+
+
 productapp.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 ### end swagger specific ###
+
+
+
 
 def db_connection():
     conn = None
@@ -94,6 +100,9 @@ def single_product(id):
         return "The Product with the id: {} has been deleted.".format(id), 200
 
 
+
+
+
 @productapp.route('/products/check/<int:prodid>/<int:amount>', methods=['GET'])
 def check_product(prodid, amount):
     conn = db_connection()
@@ -102,10 +111,10 @@ def check_product(prodid, amount):
     rows = cursor.fetchone()
     instock = rows[3]
     if instock > amount:
-        return "dit product kan købes"
+        return "true"
     else:
-        return "vi har ikke nok af dette product"
+        return "false"
 
 
 if __name__ == "__main__":
-    productapp.run(port=5001, host="localhost")
+    productapp.run(port=5000, host="0.0.0.0")

@@ -3,6 +3,7 @@ from flask_swagger_ui import get_swaggerui_blueprint
 import sqlite3
 import json
 import datetime
+import pika
 
 
 orderapp = Flask(__name__)
@@ -49,6 +50,15 @@ def order():
         new_quantity = request.json["quantity"]
         sql_insert_query = """INSERT INTO Orders (date, productId, quantity)
                               VALUES (?, ?, ?)"""
+
+        conntion = pika.BlockingConnection(
+            pika.ConnectionParameters(host='localhost')
+        )
+        channel = conntion.channel()
+        channel.queue_declare(queue='createorder')
+        channel.basic_publish(exchange='', routing_key='createorder', body="" + msg[new_product_id, new_quantity])
+
+
 
         cur = cursor.execute(sql_insert_query, (new_date, new_product_id, new_quantity))
         conn.commit()
