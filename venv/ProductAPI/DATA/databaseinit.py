@@ -7,7 +7,7 @@ CREATE_PRODUCT_TABLE = """CREATE TABLE Product
          itemsInStock integer NOT NULL,
          itemsReserved integer NOT NULL)"""
 
-conn = sqlite3.connect("product.db")
+conn = sqlite3.connect("productdatabase.db")
 
 cursor = conn.cursor()
 

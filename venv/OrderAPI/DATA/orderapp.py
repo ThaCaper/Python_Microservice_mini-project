@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
 import sqlite3
+from sqlite3 import Error
 import json
 import datetime
-import pika
 
 
 orderapp = Flask(__name__)
@@ -25,10 +25,23 @@ orderapp.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 def db_connection():
     conn = None
     try:
-        conn = sqlite3.connect('order.db', detect_types=sqlite3.PARSE_DECLTYPES)
-    except sqlite3.error as e:
-        print(e)
+        conn = sqlite3.connect("file::memory:?cache=shared")
+        print("Connection is established: Database is created in memory")
+    except Error:
+        print(Error)
     return conn
+
+con = db_connection()
+
+def sql_table(conn):
+    con
+    c = conn.cursor()
+    c.execute('''CREATE TABLE Orders
+         (id INTEGER PRIMARY KEY NOT NULL,
+         date timestamp,
+         productId INTEGER NOT NULL,
+         quantity INTEGER NOT NULL
+         );''')
 
 
 @orderapp.route('/orders', methods=['POST', 'GET'])
@@ -51,14 +64,12 @@ def order():
         sql_insert_query = """INSERT INTO Orders (date, productId, quantity)
                               VALUES (?, ?, ?)"""
 
-        conntion = pika.BlockingConnection(
-            pika.ConnectionParameters(host='localhost')
-        )
-        channel = conntion.channel()
-        channel.queue_declare(queue='createorder')
-        channel.basic_publish(exchange='', routing_key='createorder', body="" + msg[new_product_id, new_quantity])
-
-
+        #conntion = pika.BlockingConnection(
+            #pika.ConnectionParameters(host='localhost')
+        #)
+        #channel = conntion.channel()
+        #channel.queue_declare(queue='createorder')
+        #channel.basic_publish(exchange='', routing_key='createorder', body="" + msg[new_product_id, new_quantity])
 
         cur = cursor.execute(sql_insert_query, (new_date, new_product_id, new_quantity))
         conn.commit()
@@ -108,4 +119,5 @@ def single_order(id):
 
 
 if __name__ == "__main__":
-    orderapp.run(debug=True)
+    sql_table(con)
+    orderapp.run(port=5001, host="0.0.0.0")

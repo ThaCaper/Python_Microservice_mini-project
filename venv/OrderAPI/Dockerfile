@@ -4,7 +4,7 @@
 FROM python:3.8
 
 # Working directory for upcoming commands
-WORKDIR /product-app
+WORKDIR /order-app
 
 # Copies requirement.txt file
 COPY requirements.txt .
@@ -16,4 +16,4 @@ RUN pip install -r requirements.txt
 COPY DATA data
 
 # Launching python script
-CMD ["python", "ProductAPI/DATA/productapp.py"]
+CMD ["python", "OrderAPI/DATA/orderapp.py"]

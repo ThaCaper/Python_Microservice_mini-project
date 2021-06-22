@@ -1,0 +1,21 @@
+# Building a multi container for a single host
+version: '3.9'
+
+# Start of adding containers
+services:
+  product:
+
+    # Path to Dockerfile
+    build: ./ProductAPI/
+    volumes:
+      - .:/product-app
+
+    # Mapping ports to the host
+    ports:
+      - "5000:5000"
+  order:
+    build: ./OrderAPI/
+    volumes:
+      - .:/order-app
+    ports:
+      - "5001:5001"

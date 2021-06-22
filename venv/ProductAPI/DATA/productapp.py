@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
 import sqlite3
+from sqlite3 import Error
 import json
 
 productapp = Flask(__name__)
@@ -21,18 +22,29 @@ productapp.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 ### end swagger specific ###
 
 
-
-
 def db_connection():
     conn = None
     try:
-        conn = sqlite3.connect('product.db')
-    except sqlite3.error as e:
-        print(e)
+        conn = sqlite3.connect("file::memory:?cache=shared")
+        print("Connection is established: Database is created in memory")
+    except Error:
+        print(Error)
     return conn
 
+con = db_connection()
+
+def sql_table(conn):
+    con
+    c = conn.cursor()
+    c.execute("""CREATE TABLE Product 
+            (id integer PRIMARY KEY NOT NULL,
+            name text NOT NULL,
+            price integer NOT NULL,
+            itemsInStock integer NOT NULL,
+            itemsReserved integer NOT NULL)""")
+
 @productapp.route('/products', methods=['POST', 'GET'])
-def product():
+def Product():
     conn = db_connection()
     cursor = conn.cursor()
     if request.method == 'GET':
@@ -99,9 +111,6 @@ def single_product(id):
         return "The Product with the id: {} has been deleted.".format(id), 200
 
 
-
-
-
 @productapp.route('/products/check/<int:prodid>/<int:amount>', methods=['GET'])
 def check_product(prodid, amount):
     conn = db_connection()
@@ -116,4 +125,5 @@ def check_product(prodid, amount):
 
 
 if __name__ == "__main__":
+    sql_table(con)
     productapp.run(port=5000, host="0.0.0.0")
