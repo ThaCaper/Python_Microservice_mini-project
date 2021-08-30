@@ -65,7 +65,7 @@ def Product():
                               VALUES (?, ?, ?, ?)"""
         cur = cursor.execute(sql_insert_query, (new_name, new_price, new_itemsInStock, new_itemsReserved))
         conn.commit()
-        return f"Product with the id: {cur.lastrowid} created successfully", 201
+        return f"Product with the id: {cur.lastrowid} created successfully", 200
 
 @productapp.route('/products/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def single_product(id):
